@@ -1,37 +1,69 @@
-name: ROS CI
+name: CI
 
 on:
+  push:
+    branches: [main]
+    tags: ["releases/typescript/v*"]
   pull_request:
-    branches:
-      - 'main'
+    branches: ["*"]
 
 jobs:
-  test_environment:
-    runs-on: [ubuntu-latest]
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: arduino/setup-protoc@v1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: yarn
+          registry-url: https://registry.npmjs.org
+
+      - run: yarn install --immutable
+      - run: yarn lint:ci
+      - run: yarn typecheck
+      - run: yarn test
+      - run: yarn update-generated-files
+
+      - name: Ensure generated files are up to date
+        run: |
+          changes=$(git status --porcelain)
+          if [ -n "$changes" ]; then
+            echo "::error::The following generated files need to be updated. Run `yarn update-generated-files` to update them."
+            echo "$changes"
+            exit 1
+          else
+            echo "Generated schemas are up to date!"
+          fi
+
+      - name: Validate protobuf definitions
+        run: protoc --proto_path=schemas/proto schemas/proto/**/*.proto --descriptor_set_out=/dev/null
+
+      - name: Publish to NPM
+        if: ${{ startsWith(github.ref, 'refs/tags/releases/typescript/v') }}
+        run: yarn publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+  ros:
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        ros_distribution:
-          - noetic
-          - foxy
-          - galactic
-          - rolling
         include:
-          # Noetic Ninjemys (May 2020 - May 2025)
           - docker_image: rostooling/setup-ros-docker:ubuntu-focal-ros-noetic-ros-base-latest
+            ros_distribution: noetic
             ros_version: 1
-          # Foxy Fitzroy (June 2020 - May 2023)
           - docker_image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-ros-base-latest
             ros_distribution: foxy
             ros_version: 2
-          # Galactic Geochelone (May 2021 - November 2022)
           - docker_image: rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-ros-base-latest
             ros_distribution: galactic
             ros_version: 2
-          # Rolling Ridley  (June 2020 - Present)
           - docker_image: rostooling/setup-ros-docker:ubuntu-focal-ros-rolling-ros-base-latest
             ros_distribution: rolling
             ros_version: 2
+    name: "ROS ${{ matrix.ros_distribution }}"
     container:
       image: ${{ matrix.docker_image }}
     steps:
