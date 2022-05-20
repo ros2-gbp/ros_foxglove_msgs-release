@@ -1,0 +1,12 @@
+Source: ros-galactic-foxglove-msgs
+Section: misc
+Priority: optional
+Maintainer: Foxglove <ros-tooling@foxglove.dev>
+Build-Depends: debhelper (>= 9.0.0), ros-galactic-ament-cmake, ros-galactic-ament-lint-auto <!nocheck>, ros-galactic-ament-lint-common <!nocheck>, ros-galactic-geometry-msgs, ros-galactic-ros-environment, ros-galactic-rosidl-default-generators, ros-galactic-visualization-msgs, ros-galactic-ros-workspace, ros-galactic-rosidl-typesupport-fastrtps-c, ros-galactic-rosidl-typesupport-fastrtps-cpp
+Homepage: https://foxglove.dev/
+Standards-Version: 3.9.2
+
+Package: ros-galactic-foxglove-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-galactic-geometry-msgs, ros-galactic-rosidl-default-runtime, ros-galactic-visualization-msgs, ros-galactic-ros-workspace
+Description: foxglove_msgs provides visualization messages that are supported by Foxglove Studio.
