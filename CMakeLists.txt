@@ -15,15 +15,22 @@ if(${ROS_VERSION} EQUAL 1)
     COMPONENTS
     message_generation
     visualization_msgs
+    geometry_msgs
   )
 
+  file(GLOB _generated_ros1_schemas RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/ros1msg" ros1msg/*)
   add_message_files(
     DIRECTORY msg
     FILES
     ImageMarkerArray.msg
   )
+  add_message_files(
+    DIRECTORY ros1msg
+    FILES
+    ${_generated_ros1_schemas}
+  )
 
-  generate_messages(DEPENDENCIES visualization_msgs)
+  generate_messages(DEPENDENCIES visualization_msgs geometry_msgs)
 
   catkin_package(CATKIN_DEPENDS message_runtime)
 
@@ -42,11 +49,14 @@ elseif(${ROS_VERSION} EQUAL 2)
 
   find_package(ament_cmake REQUIRED)
   find_package(visualization_msgs REQUIRED)
+  find_package(geometry_msgs REQUIRED)
   find_package(rosidl_default_generators REQUIRED)
 
+  file(GLOB _generated_ros2_schemas RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" ros2msg/*)
   rosidl_generate_interfaces(${PROJECT_NAME}
     msg/ImageMarkerArray.msg
-    DEPENDENCIES visualization_msgs
+    ${_generated_ros2_schemas}
+    DEPENDENCIES visualization_msgs geometry_msgs
     ADD_LINTER_TESTS
   )
 
