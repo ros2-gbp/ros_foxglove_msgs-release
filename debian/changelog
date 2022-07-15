@@ -1,0 +1,42 @@
+ros-rolling-foxglove-msgs (2.0.0-1jammy) jammy; urgency=high
+
+  * Consolidate Transform and FrameTransform
+  * Contributors: Adrian Macneil
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Fri, 15 Jul 2022 07:00:00 -0000
+
+ros-rolling-foxglove-msgs (1.2.2-1jammy) jammy; urgency=high
+
+  * Fix CMake build accessing parent directory
+  * Contributors: Jacob Bandes-Storch
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Mon, 13 Jun 2022 07:00:00 -0000
+
+ros-rolling-foxglove-msgs (1.2.1-1jammy) jammy; urgency=high
+
+  * Fix CMake install share directory
+  * Contributors: Jacob Bandes-Storch
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Fri, 03 Jun 2022 07:00:00 -0000
+
+ros-rolling-foxglove-msgs (1.2.0-1jammy) jammy; urgency=high
+
+  * Add new Foxglove message types to foxglove_msgs
+  * Contributors: Jacob Bandes-Storch
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Tue, 17 May 2022 07:00:00 -0000
+
+ros-rolling-foxglove-msgs (1.1.0-1jammy) jammy; urgency=high
+
+  * Provide foxglove_msgs for ROS1 and ROS2
+  * Contributors: Daisuke Nishimatsu, John Hurliman, wep21
+
+ -- John Hurliman <john@foxglove.dev>  Tue, 19 Apr 2022 07:00:00 -0000
+
+ros-rolling-foxglove-msgs (1.0.0-1jammy) jammy; urgency=high
+
+  * Initial release with foxglove_msgs/ImageMarkerArray message
+
+ -- John Hurliman <john@foxglove.dev>  Wed, 26 May 2021 07:00:00 -0000
+
+
