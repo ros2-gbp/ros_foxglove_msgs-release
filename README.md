@@ -1,3 +1,26 @@
+## foxglove_msgs (humble) - 2.0.0-1
+
+The packages in the `foxglove_msgs` repository were released into the `humble` distro by running `/usr/bin/bloom-release foxglove_msgs --ros-distro humble` on `Fri, 15 Jul 2022 19:19:35 -0000`
+
+The `foxglove_msgs` package was released.
+
+Version of package(s) in repository `foxglove_msgs`:
+
+- upstream repository: https://github.com/foxglove/schemas.git
+- release repository: https://github.com/ros2-gbp/ros_foxglove_msgs-release.git
+- rosdistro version: `1.2.2-1`
+- old version: `1.2.2-1`
+- new version: `2.0.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.1`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.1`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## foxglove_msgs (galactic) - 2.0.0-1
 
 The packages in the `foxglove_msgs` repository were released into the `galactic` distro by running `/usr/bin/bloom-release foxglove_msgs --ros-distro galactic` on `Fri, 15 Jul 2022 19:18:14 -0000`
