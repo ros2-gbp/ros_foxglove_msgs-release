@@ -1,0 +1,12 @@
+Source: ros-foxy-foxglove-msgs
+Section: misc
+Priority: optional
+Maintainer: Foxglove <ros-tooling@foxglove.dev>
+Build-Depends: debhelper (>= 9.0.0), ros-foxy-ament-cmake, ros-foxy-ament-cmake-pytest <!nocheck>, ros-foxy-ament-lint-auto <!nocheck>, ros-foxy-ament-lint-common <!nocheck>, ros-foxy-geometry-msgs, ros-foxy-ros-environment, ros-foxy-rosidl-default-generators, ros-foxy-visualization-msgs, ros-foxy-ros-workspace, ros-foxy-rosidl-typesupport-fastrtps-c, ros-foxy-rosidl-typesupport-fastrtps-cpp, ros-foxy-rosidl-typesupport-connext-c, ros-foxy-rosidl-typesupport-connext-cpp
+Homepage: https://foxglove.dev/
+Standards-Version: 3.9.2
+
+Package: ros-foxy-foxglove-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-foxy-geometry-msgs, ros-foxy-rosidl-default-runtime, ros-foxy-visualization-msgs, ros-foxy-ros-workspace
+Description: foxglove_msgs provides visualization messages that are supported by Foxglove Studio.
