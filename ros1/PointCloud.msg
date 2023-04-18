@@ -15,7 +15,7 @@ geometry_msgs/Pose pose
 # Number of bytes between points in the `data`
 uint32 point_stride
 
-# Fields in the `data`
+# Fields in `data`. At least 2 coordinate fields from `x`, `y`, and `z` are required for each point's position; `red`, `green`, `blue`, and `alpha` are optional for customizing each point's color.
 foxglove_msgs/PackedElementField[] fields
 
 # Point data, interpreted using `fields`
