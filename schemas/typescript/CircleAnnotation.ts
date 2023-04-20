@@ -9,13 +9,13 @@ export type CircleAnnotation = {
   /** Timestamp of circle */
   timestamp: Time;
 
-  /** Center of the circle in 2D image coordinates (pixels) */
+  /** Center of the circle in 2D image coordinates */
   position: Point2;
 
-  /** Circle diameter in pixels */
+  /** Circle diameter */
   diameter: number;
 
-  /** Line thickness in pixels */
+  /** Line thickness */
   thickness: number;
 
   /** Fill color */

@@ -2,6 +2,7 @@ import { program } from "commander";
 import fs from "fs/promises";
 import path from "path";
 import rimraf from "rimraf";
+import { promisify } from "util";
 
 import { generateRosMsg, generateRosMsgDefinition } from "../internal";
 import {
@@ -24,7 +25,7 @@ async function logProgress(message: string, body: () => Promise<void>) {
 
 async function main({ outDir, rosOutDir }: { outDir: string; rosOutDir: string }) {
   await logProgress("Removing any existing output directory", async () => {
-    await rimraf(outDir);
+    await promisify(rimraf)(outDir);
   });
 
   await logProgress("Generating JSONSchema definitions", async () => {

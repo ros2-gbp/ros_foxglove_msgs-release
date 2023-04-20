@@ -357,13 +357,9 @@ const LineType: FoxgloveEnumSchema = {
   protobufEnumName: "Type",
   description: "An enumeration indicating how input points should be interpreted to create lines",
   values: [
-    {
-      value: 0,
-      name: "LINE_STRIP",
-      description: "Connected line segments: 0-1, 1-2, ..., (n-1)-n",
-    },
-    { value: 1, name: "LINE_LOOP", description: "Closed polygon: 0-1, 1-2, ..., (n-1)-n, n-0" },
-    { value: 2, name: "LINE_LIST", description: "Individual line segments: 0-1, 2-3, 4-5, ..." },
+    { value: 0, name: "LINE_STRIP", description: "0-1, 1-2, ..., (n-1)-n" },
+    { value: 1, name: "LINE_LOOP", description: "0-1, 1-2, ..., (n-1)-n, n-0" },
+    { value: 2, name: "LINE_LIST", description: "0-1, 2-3, 4-5, ..." },
   ],
 };
 
@@ -869,20 +865,6 @@ const FrameTransform: FoxgloveMessageSchema = {
   ],
 };
 
-const FrameTransforms: FoxgloveMessageSchema = {
-  type: "message",
-  name: "FrameTransforms",
-  description: "An array of FrameTransform messages",
-  fields: [
-    {
-      name: "transforms",
-      type: { type: "nested", schema: FrameTransform },
-      array: true,
-      description: "Array of transforms",
-    },
-  ],
-};
-
 const PoseInFrame: FoxgloveMessageSchema = {
   type: "message",
   name: "PoseInFrame",
@@ -1030,8 +1012,7 @@ const Grid: FoxgloveMessageSchema = {
       name: "fields",
       type: { type: "nested", schema: PackedElementField },
       array: true,
-      description:
-        "Fields in `data`. `red`, `green`, `blue`, and `alpha` are optional for customizing the grid's color.",
+      description: "Fields in `data`",
     },
     {
       name: "data",
@@ -1054,17 +1035,17 @@ const CircleAnnotation: FoxgloveMessageSchema = {
     {
       name: "position",
       type: { type: "nested", schema: Point2 },
-      description: "Center of the circle in 2D image coordinates (pixels)",
+      description: "Center of the circle in 2D image coordinates",
     },
     {
       name: "diameter",
       type: { type: "primitive", name: "float64" },
-      description: "Circle diameter in pixels",
+      description: "Circle diameter",
     },
     {
       name: "thickness",
       type: { type: "primitive", name: "float64" },
-      description: "Line thickness in pixels",
+      description: "Line thickness",
     },
     {
       name: "fill_color",
@@ -1087,14 +1068,10 @@ const PointsAnnotationType: FoxgloveEnumSchema = {
   protobufEnumName: "Type",
   values: [
     { name: "UNKNOWN", value: 0 },
-    { name: "POINTS", value: 1, description: "Individual points: 0, 1, 2, ..." },
-    { name: "LINE_LOOP", value: 2, description: "Closed polygon: 0-1, 1-2, ..., (n-1)-n, n-0" },
-    {
-      name: "LINE_STRIP",
-      value: 3,
-      description: "Connected line segments: 0-1, 1-2, ..., (n-1)-n",
-    },
-    { name: "LINE_LIST", value: 4, description: "Individual line segments: 0-1, 2-3, 4-5, ..." },
+    { name: "POINTS", value: 1 },
+    { name: "LINE_LOOP", value: 2 },
+    { name: "LINE_STRIP", value: 3 },
+    { name: "LINE_LIST", value: 4 },
   ],
 };
 
@@ -1116,7 +1093,7 @@ const PointsAnnotation: FoxgloveMessageSchema = {
     {
       name: "points",
       type: { type: "nested", schema: Point2 },
-      description: "Points in 2D image coordinates (pixels)",
+      description: "Points in 2D image coordinates",
       array: true,
     },
     {
@@ -1139,46 +1116,7 @@ const PointsAnnotation: FoxgloveMessageSchema = {
     {
       name: "thickness",
       type: { type: "primitive", name: "float64" },
-      description: "Stroke thickness in pixels",
-    },
-  ],
-};
-
-const TextAnnotation: FoxgloveMessageSchema = {
-  type: "message",
-  name: "TextAnnotation",
-  description: "A text label on a 2D image",
-  fields: [
-    {
-      name: "timestamp",
-      type: { type: "primitive", name: "time" },
-      description: "Timestamp of annotation",
-    },
-    {
-      name: "position",
-      type: { type: "nested", schema: Point2 },
-      description: "Bottom-left origin of the text label in 2D image coordinates (pixels)",
-    },
-    {
-      name: "text",
-      type: { type: "primitive", name: "string" },
-      description: "Text to display",
-    },
-    {
-      name: "font_size",
-      type: { type: "primitive", name: "float64" },
-      description: "Font size in pixels",
-      defaultValue: 12.0,
-    },
-    {
-      name: "text_color",
-      type: { type: "nested", schema: Color },
-      description: "Text color",
-    },
-    {
-      name: "background_color",
-      type: { type: "nested", schema: Color },
-      description: "Background fill color",
+      description: "Stroke thickness",
     },
   ],
 };
@@ -1198,12 +1136,6 @@ const ImageAnnotations: FoxgloveMessageSchema = {
       name: "points",
       type: { type: "nested", schema: PointsAnnotation },
       description: "Points annotations",
-      array: true,
-    },
-    {
-      name: "texts",
-      type: { type: "nested", schema: TextAnnotation },
-      description: "Text annotations",
       array: true,
     },
   ],
@@ -1343,8 +1275,7 @@ const PointCloud: FoxgloveMessageSchema = {
       name: "fields",
       type: { type: "nested", schema: PackedElementField },
       array: true,
-      description:
-        "Fields in `data`. At least 2 coordinate fields from `x`, `y`, and `z` are required for each point's position; `red`, `green`, `blue`, and `alpha` are optional for customizing each point's color.",
+      description: "Fields in the `data`",
     },
     {
       name: "data",
@@ -1410,7 +1341,6 @@ export const foxgloveMessageSchemas = {
   CylinderPrimitive,
   CubePrimitive,
   FrameTransform,
-  FrameTransforms,
   GeoJSON,
   Grid,
   ImageAnnotations,
@@ -1434,7 +1364,6 @@ export const foxgloveMessageSchemas = {
   Quaternion,
   RawImage,
   SpherePrimitive,
-  TextAnnotation,
   TextPrimitive,
   TriangleListPrimitive,
   Vector2,

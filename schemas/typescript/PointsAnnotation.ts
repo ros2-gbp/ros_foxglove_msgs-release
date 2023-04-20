@@ -13,7 +13,7 @@ export type PointsAnnotation = {
   /** Type of points annotation to draw */
   type: PointsAnnotationType;
 
-  /** Points in 2D image coordinates (pixels) */
+  /** Points in 2D image coordinates */
   points: Point2[];
 
   /** Outline color */
@@ -25,6 +25,6 @@ export type PointsAnnotation = {
   /** Fill color */
   fill_color: Color;
 
-  /** Stroke thickness in pixels */
+  /** Stroke thickness */
   thickness: number;
 };
