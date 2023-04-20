@@ -1,0 +1,56 @@
+ros-iron-foxglove-msgs (2.1.1-4jammy) jammy; urgency=high
+
+  * Fix typo in CubePrimitive comments
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Thu, 17 Nov 2022 16:00:00 -0000
+
+ros-iron-foxglove-msgs (2.1.0-4jammy) jammy; urgency=high
+
+  * Add frame_id to RawImage, CompressedImage, and CameraCalibration
+  * Add new SceneEntity and Primitive types
+  * Updated documentation for several types and fields
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Thu, 17 Nov 2022 16:00:00 -0000
+
+ros-iron-foxglove-msgs (2.0.0-4jammy) jammy; urgency=high
+
+  * Consolidate Transform and FrameTransform
+  * Contributors: Adrian Macneil
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Thu, 14 Jul 2022 16:00:00 -0000
+
+ros-iron-foxglove-msgs (1.2.2-4jammy) jammy; urgency=high
+
+  * Fix CMake build accessing parent directory
+  * Contributors: Jacob Bandes-Storch
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Sun, 12 Jun 2022 16:00:00 -0000
+
+ros-iron-foxglove-msgs (1.2.1-4jammy) jammy; urgency=high
+
+  * Fix CMake install share directory
+  * Contributors: Jacob Bandes-Storch
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Thu, 02 Jun 2022 16:00:00 -0000
+
+ros-iron-foxglove-msgs (1.2.0-4jammy) jammy; urgency=high
+
+  * Add new Foxglove message types to foxglove_msgs
+  * Contributors: Jacob Bandes-Storch
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Mon, 16 May 2022 16:00:00 -0000
+
+ros-iron-foxglove-msgs (1.1.0-4jammy) jammy; urgency=high
+
+  * Provide foxglove_msgs for ROS1 and ROS2
+  * Contributors: Daisuke Nishimatsu, John Hurliman, wep21
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Mon, 18 Apr 2022 16:00:00 -0000
+
+ros-iron-foxglove-msgs (1.0.0-4jammy) jammy; urgency=high
+
+  * Initial release with foxglove_msgs/ImageMarkerArray message
+
+ -- Foxglove <ros-tooling@foxglove.dev>  Tue, 25 May 2021 16:00:00 -0000
+
+
