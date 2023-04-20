@@ -8,6 +8,3 @@ foxglove_msgs/CircleAnnotation[] circles
 
 # Points annotations
 foxglove_msgs/PointsAnnotation[] points
-
-# Text annotations
-foxglove_msgs/TextAnnotation[] texts
