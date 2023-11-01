@@ -1,6 +1,6 @@
 {
   "name": "@foxglove/schemas",
-  "version": "1.3.0",
+  "version": "1.6.2",
   "description": "Foxglove-defined message schemas for ROS, Protobuf, and JSON",
   "license": "MIT",
   "repository": {
@@ -22,10 +22,11 @@
     "lint:ci": "eslint --report-unused-disable-directives .",
     "lint": "eslint --report-unused-disable-directives --fix .",
     "test": "jest",
-    "update-generated-files": "ts-node --files --project tsconfig.json scripts/updateGeneratedFiles --out-dir schemas --ros-out-dir ros_foxglove_msgs"
+    "update-generated-files": "yarn test --updateSnapshot && ts-node --files --project tsconfig.json scripts/updateGeneratedFiles --out-dir schemas --ros-out-dir ros_foxglove_msgs"
   },
   "devDependencies": {
     "@foxglove/eslint-plugin": "0.21.0",
+    "@foxglove/omgidl-parser": "^0.2.0",
     "@foxglove/rosmsg": "^4.0.0",
     "@foxglove/tsconfig": "1.1.0",
     "@types/jest": "29.4.0",
