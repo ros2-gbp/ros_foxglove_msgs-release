@@ -22,10 +22,10 @@ describe("generateProto", () => {
         // An example enum
         enum ExampleProtoEnum {
           // Value A
-          A = 0;
+          A = 1;
 
           // Value B
-          B = 1;
+          B = 2;
         }
         // duration field
         google.protobuf.Duration field_duration = 1;

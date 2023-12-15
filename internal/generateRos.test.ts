@@ -172,16 +172,16 @@ describe("generateRosMsgDefinition", () => {
             "isConstant": true,
             "name": "A",
             "type": "uint8",
-            "value": 0,
-            "valueText": "0",
+            "value": 1,
+            "valueText": "1",
           },
           {
             "description": "Value B",
             "isConstant": true,
             "name": "B",
             "type": "uint8",
-            "value": 1,
-            "valueText": "1",
+            "value": 2,
+            "valueText": "2",
           },
           {
             "arrayLength": undefined,
@@ -239,7 +239,7 @@ describe("generateRosMsgDefinition", () => {
             "isArray": false,
             "isComplex": false,
             "name": "field_duration",
-            "type": "duration",
+            "type": "builtin_interfaces/Duration",
           },
           {
             "arrayLength": undefined,
@@ -247,7 +247,7 @@ describe("generateRosMsgDefinition", () => {
             "isArray": false,
             "isComplex": false,
             "name": "field_time",
-            "type": "time",
+            "type": "builtin_interfaces/Time",
           },
           {
             "arrayLength": undefined,
@@ -295,7 +295,7 @@ describe("generateRosMsgDefinition", () => {
             "isArray": true,
             "isComplex": false,
             "name": "field_duration_array",
-            "type": "duration",
+            "type": "builtin_interfaces/Duration",
           },
           {
             "arrayLength": undefined,
@@ -303,7 +303,7 @@ describe("generateRosMsgDefinition", () => {
             "isArray": true,
             "isComplex": false,
             "name": "field_time_array",
-            "type": "time",
+            "type": "builtin_interfaces/Time",
           },
           {
             "arrayLength": undefined,
@@ -343,7 +343,7 @@ describe("generateRosMsgDefinition", () => {
             "isArray": true,
             "isComplex": false,
             "name": "field_duration_fixed_array",
-            "type": "duration",
+            "type": "builtin_interfaces/Duration",
           },
           {
             "arrayLength": 3,
@@ -351,7 +351,7 @@ describe("generateRosMsgDefinition", () => {
             "isArray": true,
             "isComplex": false,
             "name": "field_time_fixed_array",
-            "type": "time",
+            "type": "builtin_interfaces/Time",
           },
           {
             "arrayLength": 3,
@@ -390,16 +390,16 @@ describe("generateRosMsgDefinition", () => {
             "isConstant": true,
             "name": "A",
             "type": "uint8",
-            "value": 0,
-            "valueText": "0",
+            "value": 1,
+            "valueText": "1",
           },
           {
             "description": "Value B",
             "isConstant": true,
             "name": "B",
             "type": "uint8",
-            "value": 1,
-            "valueText": "1",
+            "value": 2,
+            "valueText": "2",
           },
           {
             "arrayLength": undefined,
@@ -454,8 +454,6 @@ describe("generateRosMsg", () => {
         generateRosMsgDefinition(exampleMessageWithoutArrayOfBytes, {
           rosVersion: 1,
         }),
-
-        { rosVersion: 1 },
       ),
     ).toMatchInlineSnapshot(`
       "# foxglove_msgs/ExampleMessage
@@ -521,10 +519,10 @@ describe("generateRosMsg", () => {
       string[3] field_string_fixed_array
 
       # Value A
-      uint8 A=0
+      uint8 A=1
 
       # Value B
-      uint8 B=1
+      uint8 B=2
 
       # An enum field
       uint8 field_enum
@@ -552,8 +550,6 @@ describe("generateRosMsg", () => {
         generateRosMsgDefinition(exampleMessageWithoutArrayOfBytes, {
           rosVersion: 2,
         }),
-
-        { rosVersion: 2 },
       ),
     ).toMatchInlineSnapshot(`
       "# foxglove_msgs/msg/ExampleMessage
@@ -619,10 +615,10 @@ describe("generateRosMsg", () => {
       string[3] field_string_fixed_array
 
       # Value A
-      uint8 A=0
+      uint8 A=1
 
       # Value B
-      uint8 B=1
+      uint8 B=2
 
       # An enum field
       uint8 field_enum
@@ -714,10 +710,10 @@ describe("generateRosMsgMergedSchema", () => {
       string[3] field_string_fixed_array
 
       # Value A
-      uint8 A=0
+      uint8 A=1
 
       # Value B
-      uint8 B=1
+      uint8 B=2
 
       # An enum field
       uint8 field_enum
@@ -874,15 +870,15 @@ describe("generateRosMsgMergedSchema", () => {
               "isConstant": true,
               "name": "A",
               "type": "uint8",
-              "value": 0,
-              "valueText": "0",
+              "value": 1,
+              "valueText": "1",
             },
             {
               "isConstant": true,
               "name": "B",
               "type": "uint8",
-              "value": 1,
-              "valueText": "1",
+              "value": 2,
+              "valueText": "2",
             },
             {
               "isArray": false,
@@ -994,10 +990,10 @@ describe("generateRosMsgMergedSchema", () => {
       string[3] field_string_fixed_array
 
       # Value A
-      uint8 A=0
+      uint8 A=1
 
       # Value B
-      uint8 B=1
+      uint8 B=2
 
       # An enum field
       uint8 field_enum
@@ -1287,8 +1283,8 @@ describe("generateRosMsgMergedSchema", () => {
               "name": "A",
               "type": "uint8",
               "upperBound": undefined,
-              "value": 0,
-              "valueText": "0",
+              "value": 1,
+              "valueText": "1",
             },
             {
               "arrayLength": undefined,
@@ -1300,8 +1296,8 @@ describe("generateRosMsgMergedSchema", () => {
               "name": "B",
               "type": "uint8",
               "upperBound": undefined,
-              "value": 1,
-              "valueText": "1",
+              "value": 2,
+              "valueText": "2",
             },
             {
               "arrayLength": undefined,

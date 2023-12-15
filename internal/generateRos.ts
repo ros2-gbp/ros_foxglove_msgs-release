@@ -17,7 +17,8 @@ type RosMsgDefinitionWithDescription = {
 };
 
 function primitiveToRos(
-  type: Exclude<FoxglovePrimitive, "uint32" | "bytes" | "time" | "duration">,
+  type: Exclude<FoxglovePrimitive, "uint32" | "bytes">,
+  { rosVersion }: { rosVersion: 1 | 2 },
 ) {
   switch (type) {
     case "string":
@@ -26,21 +27,14 @@ function primitiveToRos(
       return "bool";
     case "float64":
       return "float64";
+    case "time":
+      return rosVersion === 2 ? "builtin_interfaces/Time" : "time";
+    case "duration":
+      return rosVersion === 2 ? "builtin_interfaces/Duration" : "duration";
   }
 }
 
-function timeDurationToRos(type: "time" | "duration", { rosVersion }: { rosVersion: 1 | 2 }) {
-  if (type === "time") {
-    return rosVersion === 2 ? "builtin_interfaces/Time" : "time";
-  } else {
-    return rosVersion === 2 ? "builtin_interfaces/Duration" : "duration";
-  }
-}
-
-export function generateRosMsg(
-  def: RosMsgDefinitionWithDescription,
-  { rosVersion }: { rosVersion: 1 | 2 },
-): string {
+export function generateRosMsg(def: RosMsgDefinitionWithDescription): string {
   let source = "";
   source += `# ${def.rosFullInterfaceName}\n`;
   if (def.description != undefined) {
@@ -69,11 +63,7 @@ export function generateRosMsg(
       }
       constant = `=${field.valueText}`;
     }
-    let type = field.type;
-    if (type === "time" || type === "duration") {
-      type = timeDurationToRos(type, { rosVersion });
-    }
-    source += `${type}${field.isArray === true ? `[${field.arrayLength ?? ""}]` : ""} ${
+    source += `${field.type}${field.isArray === true ? `[${field.arrayLength ?? ""}]` : ""} ${
       field.name
     }${constant}\n`;
   }
@@ -179,12 +169,8 @@ export function generateRosMsgDefinition(
           isArray = true;
         } else if (field.type.name === "uint32") {
           fieldType = "uint32";
-        } else if (field.type.name === "time") {
-          fieldType = "time";
-        } else if (field.type.name === "duration") {
-          fieldType = "duration";
         } else {
-          fieldType = primitiveToRos(field.type.name);
+          fieldType = primitiveToRos(field.type.name, { rosVersion });
         }
         break;
     }
@@ -219,25 +205,22 @@ export function generateRosMsgMergedSchema(
     }
   }
 
-  let result = generateRosMsg(generateRosMsgDefinition(schema, { rosVersion }), { rosVersion });
+  let result = generateRosMsg(generateRosMsgDefinition(schema, { rosVersion }));
   for (const dep of dependencies) {
     let name: string;
     let source: string;
     if (dep.type === "ros") {
       name = dep.name;
-      source = generateRosMsg(
-        {
-          originalName: dep.name,
-          rosMsgInterfaceName: dep.name,
-          rosFullInterfaceName: dep.name,
-          fields: ros1[dep.name].definitions,
-        },
-        { rosVersion },
-      );
+      source = generateRosMsg({
+        originalName: dep.name,
+        rosMsgInterfaceName: dep.name,
+        rosFullInterfaceName: dep.name,
+        fields: ros1[dep.name].definitions,
+      });
     } else {
       const definition = generateRosMsgDefinition(dep.schema, { rosVersion });
       name = definition.rosMsgInterfaceName;
-      source = generateRosMsg(definition, { rosVersion });
+      source = generateRosMsg(definition);
     }
     result += `================================================================================\nMSG: ${name}\n${source}`;
   }

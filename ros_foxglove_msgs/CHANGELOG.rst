@@ -2,9 +2,8 @@
 Changelog for package foxglove_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-3.0.0 (2023-10-31)
+2.3.0 (2023-12-11)
 ------------------
-* Add a frame_id field to LocationFix
 * Update RawImage encodings
 * Add CompressedVideo schema
 * Improve doc on PointAnnotation field outline_color

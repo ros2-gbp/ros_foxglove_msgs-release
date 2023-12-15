@@ -117,7 +117,7 @@
           }
         }
       },
-      "description": "Per-point colors, if `type` is `POINTS`, or per-segment stroke colors, if `type` is `LINE_LIST`, `LINE_STRIP` or `LINE_LOOP`."
+      "description": "Per-point colors, if `type` is `POINTS`, or per-segment stroke colors, if `type` is `LINE_LIST`."
     },
     "fill_color": {
       "title": "foxglove.Color",
