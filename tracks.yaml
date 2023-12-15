@@ -79,7 +79,7 @@ tracks:
     ros_distro: humble
     vcs_type: git
     vcs_uri: https://github.com/foxglove/schemas.git
-    version: :{auto}
+    version: :{ask}
   iron:
     actions:
     - bloom-export-upstream :{vcs_local_uri} :{vcs_type} --tag :{release_tag} --display-uri
