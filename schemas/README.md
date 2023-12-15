@@ -17,9 +17,11 @@ All schemas are generated from [schemas.ts](/internal/schemas.ts).
 - [CircleAnnotation](#circleannotation)
 - [Color](#color)
 - [CompressedImage](#compressedimage)
+- [CompressedVideo](#compressedvideo)
 - [CubePrimitive](#cubeprimitive)
 - [CylinderPrimitive](#cylinderprimitive)
 - [FrameTransform](#frametransform)
+- [FrameTransforms](#frametransforms)
 - [GeoJSON](#geojson)
 - [Grid](#grid)
 - [ImageAnnotations](#imageannotations)
@@ -43,6 +45,7 @@ All schemas are generated from [schemas.ts](/internal/schemas.ts).
 - [SceneEntityDeletion](#sceneentitydeletion)
 - [SceneUpdate](#sceneupdate)
 - [SpherePrimitive](#sphereprimitive)
+- [TextAnnotation](#textannotation)
 - [TextPrimitive](#textprimitive)
 - [TriangleListPrimitive](#trianglelistprimitive)
 - [Vector2](#vector2)
@@ -56,9 +59,9 @@ An enumeration indicating how input points should be interpreted to create lines
 
 name | value | description
 ---- | ----- | -----------
-`LINE_STRIP` | 0 | 0-1, 1-2, ..., (n-1)-n
-`LINE_LOOP` | 1 | 0-1, 1-2, ..., (n-1)-n, n-0
-`LINE_LIST` | 2 | 0-1, 2-3, 4-5, ...
+`LINE_STRIP` | 0 | Connected line segments: 0-1, 1-2, ..., (n-1)-n
+`LINE_LOOP` | 1 | Closed polygon: 0-1, 1-2, ..., (n-1)-n, n-0
+`LINE_LIST` | 2 | Individual line segments: 0-1, 2-3, 4-5, ...
 
 
 
@@ -102,10 +105,10 @@ Type of points annotation
 name | value | description
 ---- | ----- | -----------
 `UNKNOWN` | 0 | 
-`POINTS` | 1 | 
-`LINE_LOOP` | 2 | 
-`LINE_STRIP` | 3 | 
-`LINE_LIST` | 4 | 
+`POINTS` | 1 | Individual points: 0, 1, 2, ...
+`LINE_LOOP` | 2 | Closed polygon: 0-1, 1-2, ..., (n-1)-n, n-0
+`LINE_STRIP` | 3 | Connected line segments: 0-1, 1-2, ..., (n-1)-n
+`LINE_LIST` | 4 | Individual line segments: 0-1, 2-3, 4-5, ...
 
 
 
@@ -424,7 +427,7 @@ Timestamp of circle
 </td>
 <td>
 
-Center of the circle in 2D image coordinates
+Center of the circle in 2D image coordinates (pixels)
 
 </td>
 </tr>
@@ -437,7 +440,7 @@ float64
 </td>
 <td>
 
-Circle diameter
+Circle diameter in pixels
 
 </td>
 </tr>
@@ -450,7 +453,7 @@ float64
 </td>
 <td>
 
-Line thickness
+Line thickness in pixels
 
 </td>
 </tr>
@@ -606,7 +609,77 @@ string
 
 Image format
 
-Supported values: `webp`, `jpeg`, `png`
+Supported values: image media types supported by Chrome, such as `webp`, `jpeg`, `png`
+
+</td>
+</tr>
+</table>
+
+## CompressedVideo
+
+A single frame of a compressed video bitstream
+
+<table>
+  <tr>
+    <th>field</th>
+    <th>type</th>
+    <th>description</th>
+  </tr>
+<tr>
+<td><code>timestamp</code></td>
+<td>
+
+time
+
+</td>
+<td>
+
+Timestamp of video frame
+
+</td>
+</tr>
+<tr>
+<td><code>frame_id</code></td>
+<td>
+
+string
+
+</td>
+<td>
+
+Frame of reference for the video.
+
+The origin of the frame is the optical center of the camera. +x points to the right in the video, +y points down, and +z points into the plane of the video.
+
+</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>
+
+bytes
+
+</td>
+<td>
+
+Compressed video frame data.
+
+For packet-based video codecs this data must begin and end on packet boundaries (no partial packets), and must contain enough video packets to decode exactly one image (either a keyframe or delta frame). Note: Foxglove Studio does not support video streams that include B frames because they require lookahead.
+
+</td>
+</tr>
+<tr>
+<td><code>format</code></td>
+<td>
+
+string
+
+</td>
+<td>
+
+Video format.
+
+Supported values: `h264` (Annex B formatted data only)
 
 </td>
 </tr>
@@ -817,6 +890,31 @@ Rotation component of the transform
 </tr>
 </table>
 
+## FrameTransforms
+
+An array of FrameTransform messages
+
+<table>
+  <tr>
+    <th>field</th>
+    <th>type</th>
+    <th>description</th>
+  </tr>
+<tr>
+<td><code>transforms</code></td>
+<td>
+
+[FrameTransform](#frametransform)[]
+
+</td>
+<td>
+
+Array of transforms
+
+</td>
+</tr>
+</table>
+
 ## GeoJSON
 
 GeoJSON data for annotating maps
@@ -952,7 +1050,7 @@ Number of bytes between cells within a row in `data`
 </td>
 <td>
 
-Fields in `data`
+Fields in `data`. `red`, `green`, `blue`, and `alpha` are optional for customizing the grid's color.
 
 </td>
 </tr>
@@ -1004,6 +1102,19 @@ Circle annotations
 <td>
 
 Points annotations
+
+</td>
+</tr>
+<tr>
+<td><code>texts</code></td>
+<td>
+
+[TextAnnotation](#textannotation)[]
+
+</td>
+<td>
+
+Text annotations
 
 </td>
 </tr>
@@ -1749,7 +1860,7 @@ Number of bytes between points in the `data`
 </td>
 <td>
 
-Fields in the `data`
+Fields in `data`. At least 2 coordinate fields from `x`, `y`, and `z` are required for each point's position; `red`, `green`, `blue`, and `alpha` are optional for customizing each point's color.
 
 </td>
 </tr>
@@ -1813,7 +1924,7 @@ Type of points annotation to draw
 </td>
 <td>
 
-Points in 2D image coordinates
+Points in 2D image coordinates (pixels)
 
 </td>
 </tr>
@@ -1839,7 +1950,7 @@ Outline color
 </td>
 <td>
 
-Per-point colors, if `type` is `POINTS`, or per-segment stroke colors, if `type` is `LINE_LIST`.
+Per-point colors, if `type` is `POINTS`, or per-segment stroke colors, if `type` is `LINE_LIST`, `LINE_STRIP` or `LINE_LOOP`.
 
 </td>
 </tr>
@@ -1865,7 +1976,7 @@ float64
 </td>
 <td>
 
-Stroke thickness
+Stroke thickness in pixels
 
 </td>
 </tr>
@@ -2148,7 +2259,7 @@ string
 
 Encoding of the raw image data
 
-Supported values: `8UC1`, `8UC3`, `16UC1`, `32FC1`, `bayer_bggr8`, `bayer_gbrg8`, `bayer_grbg8`, `bayer_rggb8`, `bgr8`, `bgra8`, `mono8`, `mono16`, `rgb8`, `rgba8`, `yuv422`
+Supported values: `8UC1`, `8UC3`, `16UC1`, `32FC1`, `bayer_bggr8`, `bayer_gbrg8`, `bayer_grbg8`, `bayer_rggb8`, `bgr8`, `bgra8`, `mono8`, `mono16`, `rgb8`, `rgba8`, `uyvy` or `yuv422`, `yuyv` or `yuv422_yuy2`
 
 </td>
 </tr>
@@ -2509,6 +2620,96 @@ Size (diameter) of the sphere along each axis
 <td>
 
 Color of the sphere
+
+</td>
+</tr>
+</table>
+
+## TextAnnotation
+
+A text label on a 2D image
+
+<table>
+  <tr>
+    <th>field</th>
+    <th>type</th>
+    <th>description</th>
+  </tr>
+<tr>
+<td><code>timestamp</code></td>
+<td>
+
+time
+
+</td>
+<td>
+
+Timestamp of annotation
+
+</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td>
+
+[Point2](#point2)
+
+</td>
+<td>
+
+Bottom-left origin of the text label in 2D image coordinates (pixels)
+
+</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>
+
+string
+
+</td>
+<td>
+
+Text to display
+
+</td>
+</tr>
+<tr>
+<td><code>font_size</code></td>
+<td>
+
+float64
+
+</td>
+<td>
+
+Font size in pixels
+
+</td>
+</tr>
+<tr>
+<td><code>text_color</code></td>
+<td>
+
+[Color](#color)
+
+</td>
+<td>
+
+Text color
+
+</td>
+</tr>
+<tr>
+<td><code>background_color</code></td>
+<td>
+
+[Color](#color)
+
+</td>
+<td>
+
+Background fill color
 
 </td>
 </tr>
