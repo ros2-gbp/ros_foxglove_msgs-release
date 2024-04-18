@@ -1,0 +1,12 @@
+Source: ros-jazzy-foxglove-msgs
+Section: misc
+Priority: optional
+Maintainer: Foxglove <ros-tooling@foxglove.dev>
+Build-Depends: debhelper (>= 9.0.0), ament-cmake, ament-cmake-copyright <!nocheck>, ament-cmake-cppcheck <!nocheck>, ament-cmake-cpplint <!nocheck>, ament-cmake-flake8 <!nocheck>, ament-cmake-lint-cmake <!nocheck>, ament-cmake-pep257 <!nocheck>, ament-cmake-pytest <!nocheck>, ament-cmake-uncrustify <!nocheck>, ament-cmake-xmllint <!nocheck>, ament-lint <!nocheck>, libgeometry-msgs-dev, libvisualization-msgs-dev, python3-geometry-msgs, python3-visualization-msgs, ros-environment, ros-geometry-msgs, ros-jazzy-rosidl-default-generators, ros-visualization-msgs, ros-jazzy-ros-workspace, ros-jazzy-rosidl-typesupport-fastrtps-c, ros-jazzy-rosidl-typesupport-fastrtps-cpp
+Homepage: https://foxglove.dev/
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-foxglove-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgeometry-msgs-dev, libvisualization-msgs-dev, python3-geometry-msgs, python3-visualization-msgs, ros-geometry-msgs, ros-jazzy-rosidl-default-runtime, ros-visualization-msgs, ros-jazzy-ros-workspace
+Description: foxglove_msgs provides visualization messages that are supported by Foxglove Studio.
