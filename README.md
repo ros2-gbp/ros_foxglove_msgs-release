@@ -1,6 +1,6 @@
 # @foxglove/schemas
 
-Message schemas supported by [Foxglove Studio](https://studio.foxglove.dev)
+Message schemas supported by [Foxglove](https://foxglove.dev)
 
 | Language/Framework    | Package name                  | Version                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | --------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -11,11 +11,11 @@ Message schemas supported by [Foxglove Studio](https://studio.foxglove.dev)
 
 ## Introduction
 
-See [Foxglove Schemas documentation](https://foxglove.dev/docs/studio/messages).
+See [Foxglove Schemas documentation](https://docs.foxglove.dev/docs/visualization/message-schemas/introduction).
 
 The [schemas](./schemas) folder contains type definitions generated for ROS 1, ROS 2, Protobuf, JSON Schema, TypeScript, and OMG IDL.
 
-These schemas can be used in [MCAP](https://github.com/foxglove/mcap) files or [Foxglove WebSocket](https://github.com/foxglove/ws-protocol) servers to take advantage of Foxglove Studio's visualizations.
+These schemas can be used in [MCAP](https://github.com/foxglove/mcap) files or [Foxglove WebSocket](https://github.com/foxglove/ws-protocol) servers to take advantage of Foxglove's visualizations.
 
 ## License
 
@@ -58,4 +58,4 @@ Packages will be available via apt after the [next sync](https://discourse.ros.o
 
 ## Stay in touch
 
-Join our [Slack channel](https://foxglove.dev/join-slack) to ask questions, share feedback, and stay up to date on what our team is working on.
+Join our [Slack channel](https://foxglove.dev/slack) to ask questions, share feedback, and stay up to date on what our team is working on.

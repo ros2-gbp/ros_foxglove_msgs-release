@@ -1,6 +1,6 @@
 # Foxglove Schemas (Flatbuffer)
 
-This package provides [Flatbuffer](https://google.github.io/flatbuffers/) classes for [Foxglove Schemas](https://foxglove.dev/docs/studio/messages/introduction).
+This package provides [Flatbuffer](https://google.github.io/flatbuffers/) classes for [Foxglove Schemas](https://docs.foxglove.dev/docs/visualization/message-schemas/introduction).
 
 ## Installation
 
@@ -35,4 +35,4 @@ msg_data = builder.Output()
 
 ## Stay in touch
 
-Join our [Slack channel](https://foxglove.dev/join-slack) to ask questions, share feedback, and stay up to date on what our team is working on.
+Join our [Slack channel](https://foxglove.dev/slack) to ask questions, share feedback, and stay up to date on what our team is working on.
