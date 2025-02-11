@@ -1,6 +1,0 @@
-changelog:
-  exclude:
-    authors:
-      - dependabot
-    labels:
-      - ignore-for-changelog
