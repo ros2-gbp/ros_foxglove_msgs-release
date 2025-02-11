@@ -3,15 +3,52 @@ name: CI
 on:
   push:
     branches: [main]
-    tags: ["releases/**"]
-  pull_request:
-    branches: ["*"]
+    tags: ["**"]
+  pull_request: {}
 
 jobs:
-  build:
+  rust:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - name: Install common dependencies
+        uses: ./.github/actions/common-deps
+
+      - uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          version: "29.x"
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - name: Ensure generated protobuf schemas are up to date
+        run: cargo run --bin foxglove-proto-gen && git diff --exit-code
+
+      - run: cargo fmt --all --check
+      - run: cargo build --verbose
+      - run: cargo clippy --no-deps --all-targets --tests -- -D warnings
+      - run: cargo test --features unstable --verbose
+        timeout-minutes: 10
+      - run: cargo publish --package foxglove --dry-run
+      - run: cargo publish --package foxglove
+        if: startsWith(github.ref, 'refs/tags/sdk/v')
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: yarn
+          registry-url: https://registry.npmjs.org
+
       - name: Install Flatbuffer compiler
         run: |
           curl -LO https://github.com/google/flatbuffers/releases/download/v23.1.21/Linux.flatc.binary.clang++-12.zip
@@ -19,27 +56,33 @@ jobs:
           unzip Linux.flatc.binary.clang++-12.zip
           rm Linux.flatc.binary.clang++-12.zip
           sudo mv flatc /usr/local/bin
-      - uses: arduino/setup-protoc@v1
+
+      - uses: arduino/setup-protoc@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          cache: yarn
-          registry-url: https://registry.npmjs.org
+          version: "29.x"
 
       - run: yarn install --immutable
       - run: yarn lint:ci
-      - run: yarn typecheck
+
+      # must run this first because it copies the jsonschema directory
+      - run: yarn workspace @foxglove/schemas build
+
+      # typecheck remaining files in the repo
+      - run: yarn build
+
       - run: yarn test
-      - run: yarn update-generated-files
 
       - name: Ensure generated files are up to date
         run: |
+          yarn update-generated-files
+          git add --all
           changes=$(git status --porcelain)
           if [ -n "$changes" ]; then
             echo "::error::The following generated files need to be updated. Run 'yarn update-generated-files' to update them."
             echo "$changes"
+            echo ""
+            git diff --cached
             exit 1
           else
             echo "Generated schemas are up to date!"
@@ -47,7 +90,7 @@ jobs:
 
       - name: Validate Flatbuffer definitions
         run: |
-          output=$(flatc --ts -o /dev/null ./schemas/flatbuffer/*.fbs)
+          output=$(flatc --require-explicit-ids --ts -o /dev/null ./schemas/flatbuffer/*.fbs)
           if [ -n "$output" ]; then
             echo "::error::Flatbuffer schema compilation had warnings or errors. Fix them to proceed:"
             echo "$output"
@@ -58,78 +101,10 @@ jobs:
         run: protoc --proto_path=schemas/proto schemas/proto/**/*.proto --descriptor_set_out=/dev/null
 
       - name: Publish to NPM
-        if: ${{ startsWith(github.ref, 'refs/tags/releases/typescript/v') }}
-        run: yarn publish --access public
+        if: startsWith(github.ref, 'refs/tags/typescript/v')
+        run: yarn npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-
-  python:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: python
-    steps:
-      - uses: actions/checkout@v3
-      - uses: arduino/setup-protoc@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Install Flatbuffer compiler
-        run: |
-          curl -LO https://github.com/google/flatbuffers/releases/download/v23.1.21/Linux.flatc.binary.clang++-12.zip
-          echo "359dbbf56153cc1b022170a228adfde4199f67dc  Linux.flatc.binary.clang++-12.zip" | shasum -a 1 -c
-          unzip Linux.flatc.binary.clang++-12.zip
-          rm Linux.flatc.binary.clang++-12.zip
-          sudo mv flatc /usr/local/bin
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.7
-          cache: pipenv
-      - run: pip install pipenv==2022.7.24
-
-      - run: make test
-      - run: make build
-
-      - name: Publish foxglove-schemas-flatbuffer to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        if: ${{ !github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]' }}
-        with:
-          user: __token__
-          password: ${{ secrets.TESTPYPI_API_TOKEN }}
-          packages_dir: python/foxglove-schemas-flatbuffer/dist
-          repository_url: https://test.pypi.org/legacy/
-          skip_existing: true
-
-      - name: Publish foxglove-schemas-flatbuffer to PyPI
-        if: |
-          !github.event.pull_request.head.repo.fork &&
-          github.actor != 'dependabot[bot]' &&
-          startsWith(github.ref, 'refs/tags/releases/python/foxglove-schemas-flatbuffer/v')
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
-          packages_dir: python/foxglove-schemas-flatbuffer/dist
-
-      - name: Publish foxglove-schemas-protobuf to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        if: ${{ !github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]' }}
-        with:
-          user: __token__
-          password: ${{ secrets.TESTPYPI_API_TOKEN }}
-          packages_dir: python/foxglove-schemas-protobuf/dist
-          repository_url: https://test.pypi.org/legacy/
-          skip_existing: true
-
-      - name: Publish foxglove-schemas-protobuf to PyPI
-        if: |
-          !github.event.pull_request.head.repo.fork &&
-          github.actor != 'dependabot[bot]' &&
-          startsWith(github.ref, 'refs/tags/releases/python/foxglove-schemas-protobuf/v')
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
-          packages_dir: python/foxglove-schemas-protobuf/dist
 
   ros:
     runs-on: ubuntu-latest
@@ -137,9 +112,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - docker_image: rostooling/setup-ros-docker:ubuntu-bionic-ros-melodic-ros-base-latest
-            ros_distribution: melodic
-            ros_version: 1
           - docker_image: rostooling/setup-ros-docker:ubuntu-focal-ros-noetic-ros-base-latest
             ros_distribution: noetic
             ros_version: 1
@@ -155,7 +127,10 @@ jobs:
           - docker_image: rostooling/setup-ros-docker:ubuntu-jammy-ros-iron-ros-base-latest
             ros_distribution: iron
             ros_version: 2
-          - docker_image: rostooling/setup-ros-docker:ubuntu-jammy-ros-rolling-ros-base-latest
+          - docker_image: rostooling/setup-ros-docker:ubuntu-noble-ros-jazzy-ros-base-latest
+            ros_distribution: jazzy
+            ros_version: 2
+          - docker_image: rostooling/setup-ros-docker:ubuntu-noble-ros-rolling-ros-base-latest
             ros_distribution: rolling
             ros_version: 2
     name: "ROS ${{ matrix.ros_distribution }}"
@@ -165,11 +140,11 @@ jobs:
       - name: setup directories
         run: mkdir -p ros_ws/src
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ros_ws/src
       - name: build and test ros1
-        if: ${{ matrix.ros_version == 1 }}
+        if: matrix.ros_version == 1
         uses: ros-tooling/action-ros-ci@master
         with:
           package-name: foxglove_msgs
@@ -177,12 +152,17 @@ jobs:
           vcs-repo-file-url: ""
 
       - name: Downgrade pydocstyle as a workaround for ament_lint error https://github.com/ament/ament_lint/pull/428
-        if: ${{ matrix.ros_distribution == 'galactic' }}
+        if: matrix.ros_distribution == 'galactic'
         run: |
           sudo pip install pydocstyle==6.1.1
 
+      - name: Downgrade pytest as a workaround for https://github.com/scientific-python/pytest-doctestplus/issues/240
+        if: matrix.ros_distribution == 'humble' || matrix.ros_distribution == 'iron'
+        run: |
+          sudo pip install pytest==8.0.2
+
       - name: build and test ros2
-        if: ${{ matrix.ros_version == 2 }}
+        if: matrix.ros_version == 2
         uses: ros-tooling/action-ros-ci@master
         with:
           package-name: foxglove_msgs
