@@ -1,0 +1,12 @@
+Source: ros-kilted-foxglove-msgs
+Section: misc
+Priority: optional
+Maintainer: Foxglove <ros-tooling@foxglove.dev>
+Build-Depends: debhelper (>= 9.0.0), ros-kilted-ament-cmake, ros-kilted-ament-cmake-pytest <!nocheck>, ros-kilted-ament-lint-auto <!nocheck>, ros-kilted-ament-lint-common <!nocheck>, ros-kilted-geometry-msgs, ros-kilted-ros-environment, ros-kilted-rosidl-default-generators, ros-kilted-visualization-msgs, ros-kilted-ros-workspace, ros-kilted-rosidl-typesupport-fastrtps-c, ros-kilted-rosidl-typesupport-fastrtps-cpp
+Homepage: https://foxglove.dev/
+Standards-Version: 3.9.2
+
+Package: ros-kilted-foxglove-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-kilted-geometry-msgs, ros-kilted-rosidl-default-runtime, ros-kilted-visualization-msgs, ros-kilted-ros-workspace
+Description: foxglove_msgs provides visualization messages that are supported by Foxglove.
