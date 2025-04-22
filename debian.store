@@ -1,1 +1,1 @@
-{"base": "25c75ac", "parent": "debian/rolling/foxglove_msgs", "previous": "ea76275", "trim": "", "trimbase": ""}
+{"base": "f1bbb3a50f52", "parent": "debian/kilted/foxglove_msgs", "previous": "b71fd8679dc4", "trim": "", "trimbase": ""}
